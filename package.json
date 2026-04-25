@@ -1,0 +1,21 @@
+{
+  "name": "learnmind-ai",
+  "version": "1.0.0",
+  "description": "LearnMind AI - Intelligent Learning Platform",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces",
+    "build": "npm run build --workspaces",
+    "start": "npm start --workspace=server",
+    "lint": "npm run lint --workspaces",
+    "lint:fix": "npm run lint:fix --workspaces",
+    "type-check": "npm run type-check --workspaces",
+    "install:all": "npm install"
+  },
+  "author": "Shivank",
+  "license": "ISC"
+}
