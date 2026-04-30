@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  clerkId   String     @unique
+  email     String     @unique
+  plan      String     @default("free")
+  createdAt DateTime   @default(now())
+
+  documents Document[]
+  messages  Message[]
+  quizzes   Quiz[]
+}
+
+model Document {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  name      String
+  fileUrl   String
+  status    String
+  createdAt DateTime   @default(now())
+
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  quizzes   Quiz[]
+
+  @@index([userId])
+}
+
+model Message {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  documentId Int
+  role       String
+  content    String
+  createdAt  DateTime  @default(now())
+
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document   Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([documentId])
+}
+
+model Quiz {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  documentId Int
+  questions  Json
+  createdAt  DateTime  @default(now())
+
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document   Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([documentId])
+}
