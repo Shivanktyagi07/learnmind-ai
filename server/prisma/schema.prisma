@@ -23,6 +23,7 @@ model User {
   documents Document[]
   messages  Message[]
   quizzes   Quiz[]
+  flashcards Flashcard[]
 }
 
 model Document {
@@ -36,6 +37,7 @@ model Document {
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   messages  Message[]
   quizzes   Quiz[]
+  flashcards Flashcard[]
 
   @@index([userId])
 }
@@ -64,6 +66,21 @@ model Quiz {
 
   user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   document   Document  @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([documentId])
+}
+
+model Flashcard {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  documentId Int
+  front      String
+  back       String
+  createdAt  DateTime @default(now())
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([documentId])
