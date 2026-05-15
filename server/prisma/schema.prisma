@@ -24,6 +24,8 @@ model User {
   messages  Message[]
   quizzes   Quiz[]
   flashcards Flashcard[]
+  studyPlans  StudyPlan[]
+  quizResults QuizResult[]
 }
 
 model Document {
@@ -69,6 +71,7 @@ model Quiz {
 
   @@index([userId])
   @@index([documentId])
+  results QuizResult[]
 }
 
 model Flashcard {
@@ -84,4 +87,30 @@ model Flashcard {
 
   @@index([userId])
   @@index([documentId])
+}
+
+model StudyPlan {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  plan      Json
+  examDate  DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model QuizResult {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  quizId      Int
+  score       Float
+  topicScores Json
+  createdAt   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz Quiz @relation(fields: [quizId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
